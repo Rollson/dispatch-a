@@ -1,6 +1,8 @@
+# https://blog.marcnuri.com/triggering-github-actions-across-different-repositories
+
 on:
   push:
-  repository_dispatch:
+  # repository_dispatch:
 
 jobs:
   ping-pong:
