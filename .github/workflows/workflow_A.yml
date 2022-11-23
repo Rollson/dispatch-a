@@ -52,8 +52,5 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Test
         run: |
-          curl -X POST https://github.com/Rollson/dispatch-b/dispatches \  
-          -H 'Accept: application/vnd.github.everest-preview+json' \
-          -u ${{ secrets.ACCESS_TOKEN }} \
-          --data '{"event_type": "Trigger Workflow", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
+          curl -X POST https://github.com/Rollson/dispatch-b/dispatches -H 'Accept: application/vnd.github.everest-preview+json' -u ${{ secrets.ACCESS_TOKEN }} --data '{"event_type": "Trigger Workflow", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
       - uses: actions/checkout@v3
