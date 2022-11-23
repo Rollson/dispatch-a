@@ -1,26 +1,59 @@
-# https://blog.marcnuri.com/triggering-github-actions-across-different-repositories
+# # https://blog.marcnuri.com/triggering-github-actions-across-different-repositories
 
+# on:
+#   push:
+#   # repository_dispatch:
+
+# jobs:
+#   ping-pong:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: PING - Dispatch initiating repository event
+#         if: github.event.action != 'pong'
+#         run: |
+#           curl -X POST https://github.com/Rollson/dispatch-b/dispatches \
+#           -H 'Accept: application/vnd.github.everest-preview+json' \
+#           -u ${{ secrets.ACCESS_TOKEN }} \
+#           --data '{"event_type": "ping", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
+#       # - name: ACK - Acknowledge pong from remote repository
+#       #   if: github.event.action == 'pong'
+#       #   run: |
+#       #     echo "PONG received from '${{ github.event.client_payload.repository }}'" && \
+#       #     curl -X POST https://github.com/Rollson/dispatch-b/dispatches \
+#       #     -H 'Accept: application/vnd.github.everest-preview+json' \
+#       #     -u ${{ secrets.ACCESS_TOKEN }} \
+#       #     --data '{"event_type": "ack", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
+      
+
+name: workflow_A
 on:
-  push:
-  # repository_dispatch:
+  workflow_dispatch:
+     inputs:
+      workflow_02:
+        description: 'ًWorkflow 2 which will be triggered'
+        required: true
+        default: 'workflow_B'
+
+      workflow2_github_account:
+        description: 'GitHub Account Owner'
+        required: true
+        default: 'Rollson'
+
+      workflow2_repo_github:
+        description: 'repo-name'
+        required: true
+        default: 'dispatch-b' 
 
 jobs:
-  ping-pong:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: PING - Dispatch initiating repository event
-        if: github.event.action != 'pong'
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Test
         run: |
-          curl -X POST https://github.com/Rollson/dispatch-b/dispatches \
+          curl -X POST https://github.com/Rollson/dispatch-b/dispatches \  
           -H 'Accept: application/vnd.github.everest-preview+json' \
           -u ${{ secrets.ACCESS_TOKEN }} \
-          --data '{"event_type": "ping", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
-      # - name: ACK - Acknowledge pong from remote repository
-      #   if: github.event.action == 'pong'
-      #   run: |
-      #     echo "PONG received from '${{ github.event.client_payload.repository }}'" && \
-      #     curl -X POST https://github.com/Rollson/dispatch-b/dispatches \
-      #     -H 'Accept: application/vnd.github.everest-preview+json' \
-      #     -u ${{ secrets.ACCESS_TOKEN }} \
-      #     --data '{"event_type": "ack", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
-      
+          --data '{"event_type": "Trigger Workflow", "client_payload": { "repository": "'"$GITHUB_REPOSITORY"'" }}'
+      - uses: actions/checkout@v3
